@@ -114,12 +114,23 @@ table {
     justify-content: center;
 }
 
+#applicant-profile-link {
+    position: absolute;
+    top: 20px;
+    right: 0;
+}
+
 .section{
     margin: 10px;
     width: 90%;
-    height: 500px;
+    height: fit-content;
     border: 1px solid var(--dn-grey);
     border-radius: 6px;
+    padding: 20px;
+}
+
+p {
+    margin-top: 0;
 }
 
 .nav-link{
