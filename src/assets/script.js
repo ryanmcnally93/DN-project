@@ -43,6 +43,22 @@ function GetSectionContent(sectionName){
         return SectionNotFoundContent();
 }
 
+function fetchJSONData() {
+    fetch("../roles.json")
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error
+                    (`HTTP error! Status: ${res.status}`);
+            }
+            return res.json();
+        })
+        .then((data) => 
+              console.log(data.jobsdataset))
+        .catch((error) => 
+               console.error("Unable to fetch data:", error));
+}
+fetchJSONData();
+
 //Section Template Functions - Returning html for that section.
 function MainContent(){
     return `
