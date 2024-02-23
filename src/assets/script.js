@@ -43,21 +43,35 @@ function GetSectionContent(sectionName){
         return SectionNotFoundContent();
 }
 
-function fetchJSONData() {
-    fetch("../roles.json")
-        .then((res) => {
-            if (!res.ok) {
-                throw new Error
-                    (`HTTP error! Status: ${res.status}`);
-            }
-            return res.json();
-        })
-        .then((data) => 
-              console.log(data.jobsdataset))
-        .catch((error) => 
-               console.error("Unable to fetch data:", error));
-}
-fetchJSONData();
+fetch('../roles.json')
+.then(function(response){
+    return response.json();
+})
+.then(function(jobs){
+    let target = document.getElementById('target');
+    let out = "";
+    let i = 0;
+    for(let job of jobs.jobsdataset) {
+        out += `
+            <tr>
+                <td class="width">${job.Role_Category}</td>
+                <td>${job.Role}</td>
+                <td>${job.Location}</td>
+                <td>${job.Industry}</td>
+                <td>${job.Functional_Area}</td>
+                <td>${job.Job_Title}</td>
+                <td>${job.Job_Experience_Required}</td>
+                <td>${job.Job_Salary}</td>
+                <td>LINK</td>
+            </tr>
+        `;
+        i++;
+        if (i === 10) { break; }
+    }
+
+    target.innerHTML = out;
+})
+
 
 //Section Template Functions - Returning html for that section.
 function MainContent(){
@@ -80,84 +94,8 @@ function MainContent(){
                 <th>Details/Apply</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><a href="#applicant-job-view" id="details-link" class="nav-link green-btn">Details</a></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
+        <tbody id="target">
+            
         </tbody>
     </table>
     `;
@@ -187,73 +125,8 @@ function EmployerMain(){
                 <th>Details/Apply</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><a href="#employer-job-view" id="details-link" class="nav-link green-btn">Manage</a></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><a href="#employer-job-view" id="details-link" class="nav-link green-btn">Add New</a></td>
-            </tr>
+        <tbody id="target">
+            
         </tbody>
     </table>
     `;
