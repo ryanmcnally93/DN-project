@@ -3,13 +3,39 @@ if(!location.hash){
     location.hash = "#main";
 };
 
-//Reference Section Element
-const Section = document.getElementById("section");
+// Open Database and event listeners
+let db;
+const openRequest = window.indexedDB.open("jobs_array", 1);
+openRequest.addEventListener("error", () => 
+    console.error("Database failed to open"),
+);
+openRequest.addEventListener("success", () => {
+    console.log("Database opened successfully");
+    db = openRequest.result;
+    DisplayData();
+});
+openRequest.addEventListener("upgradeneeded", (e) => {
+    console.log('upgradeneeded is being called!');
+    db = e.target.result;
+    const objectStore = db.createObjectStore("jobs_array", {
+        keyPath: "id",
+        autoIncrement: true,
+    });
+    objectStore.createIndex("role_category", "role_category", { unique: false });
+    objectStore.createIndex("role", "role", { unique: false });
+    objectStore.createIndex("location", "location", { unique: false });
+    objectStore.createIndex("industry", "industry", { unique: false });
+    objectStore.createIndex("functional_area", "functional_area", { unique: false });
+    objectStore.createIndex("job_title", "job_title", { unique: false });
+    objectStore.createIndex("job_experience_required", "job_experience_required", { unique: false });
+    objectStore.createIndex("job_salary", "job_salary", { unique: false });
+    
+    console.log("Database setup complete");
+});
 
-//Update Section on Load
+const Section = document.getElementById("section");
 UpdateSection();
 
-//Update Section Contents when hash is changed.
 window.addEventListener("hashchange", () =>{
     UpdateSection();
 })
@@ -20,12 +46,10 @@ function UpdateSection(){
     UpdateSectionContent(sectionName);
 }
 
-//Updates the innerHTML of the section element.
 function UpdateSectionContent(sectionName){
     Section.innerHTML = GetSectionContent(sectionName);
 }
 
-//Get Section Content based on the SectionName
 function GetSectionContent(sectionName){
     if(sectionName == "main")
         return MainContent();
@@ -43,35 +67,95 @@ function GetSectionContent(sectionName){
         return SectionNotFoundContent();
 }
 
-fetch('../roles.json')
-.then(function(response){
-    return response.json();
-})
-.then(function(jobs){
-    let target = document.getElementById('target');
-    let out = "";
-    let i = 0;
-    for(let job of jobs.jobsdataset) {
-        out += `
-            <tr>
-                <td class="width">${job.Role_Category}</td>
-                <td>${job.Role}</td>
-                <td>${job.Location}</td>
-                <td>${job.Industry}</td>
-                <td>${job.Functional_Area}</td>
-                <td>${job.Job_Title}</td>
-                <td>${job.Job_Experience_Required}</td>
-                <td>${job.Job_Salary}</td>
-                <td>LINK</td>
-            </tr>
-        `;
-        i++;
-        if (i === 10) { break; }
-    }
+function AccessJobs() {
+    fetch('../roles.json')
+    .then(function(response){
+        return response.json();
+    })
+    .then(function(jobs){
+        let target = document.getElementById('target');
+        let out = "";
+        let i = 0;
+        for(let job of jobs.jobsdataset) {
+            out += `
+                <tr>
+                    <td class="width">${job.Role_Category}</td>
+                    <td>${job.Role}</td>
+                    <td>${job.Location}</td>
+                    <td>${job.Industry}</td>
+                    <td>${job.Functional_Area}</td>
+                    <td>${job.Job_Title}</td>
+                    <td>${job.Job_Experience_Required}</td>
+                    <td>${job.Job_Salary}</td>
+                    <td>LINK</td>
+                </tr>
+            `;
+            i++;
+            if (i === 10) { break; }
+        }
 
-    target.innerHTML = out;
-})
+        target.innerHTML = out;
+    })
+}
 
+function AddJobs() {
+    fetch('../roles.json')
+    .then(function(response){
+        return response.json();
+    })
+    .then(function(jobs){
+        let j = 0;
+        let newItem = '';
+        const transaction = db.transaction(["jobs_array"], "readwrite");
+        const objectStore = transaction.objectStore("jobs_array");
+        let addRequest = '';
+        for(let job of jobs.jobsdataset) {
+            newItem = { 
+                role_category: job.Role_Category,
+                role: job.Role,
+                location: job.Location,
+                industry: job.Industry,
+                functional_area: job.Functional_Area,
+                job_title: job.Job_Title,
+                job_experience_required: job.Job_Experience_Required,
+                job_salary: job.Job_Salary
+            };
+            if (newItem.role_category === undefined) {
+                newItem.role_category = "Not given";
+            }
+            if (newItem.role === undefined) {
+                newItem.role = "Not given";
+            }
+            if (newItem.location === undefined) {
+                newItem.location = "Not given";
+            }
+            if (newItem.industry === undefined) {
+                newItem.industry = "Not given";
+            }
+            if (newItem.functional_area === undefined) {
+                newItem.functional_area = "Not given";
+            }
+            if (newItem.job_title === undefined) {
+                newItem.job_title = "Not given";
+            }
+            if (newItem.job_experience_required === undefined) {
+                newItem.job_experience_required = "Not given";
+            }
+            if (newItem.job_salary === undefined) {
+                newItem.job_salary = "Not given";
+            }
+            addRequest = objectStore.add(newItem);
+
+            j++;
+            if (j === 50) { break; };
+        }
+        console.log('Successfully saved ' + j + ' jobs to IndexedDB')
+    })
+}
+
+function DisplayData() {
+    console.log(db);
+}
 
 //Section Template Functions - Returning html for that section.
 function MainContent(){
@@ -98,7 +182,7 @@ function MainContent(){
             
         </tbody>
     </table>
-    `;
+    ` + AccessJobs() + AddJobs();;
 }
 
 function EmployerMain(){
@@ -129,7 +213,7 @@ function EmployerMain(){
             
         </tbody>
     </table>
-    `;
+    ` + AccessJobs();
 }
 
 function EmployerProfile(){
