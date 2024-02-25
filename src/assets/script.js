@@ -1,4 +1,3 @@
-//Set the hash to default
 if(!location.hash){
     location.hash = "#main";
 };
@@ -12,7 +11,6 @@ openRequest.addEventListener("error", () =>
 openRequest.addEventListener("success", () => {
     console.log("Database opened successfully");
     db = openRequest.result;
-    DisplayData();
 });
 openRequest.addEventListener("upgradeneeded", (e) => {
     console.log('upgradeneeded is being called!');
@@ -42,11 +40,11 @@ window.addEventListener("hashchange", () =>{
 
 function UpdateSection(){
     var sectionName = location.hash.substring(1);
-    console.log(sectionName);
     UpdateSectionContent(sectionName);
 }
 
 function UpdateSectionContent(sectionName){
+    AccessJobs();
     Section.innerHTML = GetSectionContent(sectionName);
 }
 
@@ -157,7 +155,6 @@ function DisplayData() {
     console.log(db);
 }
 
-//Section Template Functions - Returning html for that section.
 function MainContent(){
     return `
     <div class="section-nav">
@@ -182,7 +179,7 @@ function MainContent(){
             
         </tbody>
     </table>
-    ` + AccessJobs() + AddJobs();;
+    ` + AddJobs();;
 }
 
 function EmployerMain(){
@@ -213,7 +210,7 @@ function EmployerMain(){
             
         </tbody>
     </table>
-    ` + AccessJobs();
+    `;
 }
 
 function EmployerProfile(){
