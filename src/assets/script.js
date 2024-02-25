@@ -44,12 +44,6 @@ function UpdateSection(){
 }
 
 function UpdateSectionContent(sectionName){
-    AccessJobs();
-    if (!x) {
-        AddJobs();
-        console.log('AddJobs function called');
-        let x;
-    }
     Section.innerHTML = GetSectionContent(sectionName);
 }
 
@@ -153,7 +147,7 @@ function AddJobs() {
             if (j === 50) { break; };
         }
         console.log('Successfully saved ' + j + ' jobs to IndexedDB')
-        DisplayData();
+        DisplayData()
     })
 }
 
@@ -185,7 +179,7 @@ function MainContent(){
             
         </tbody>
     </table>
-    `;
+    ` + AccessJobs() + AddJobs();
 }
 
 function EmployerMain(){
@@ -216,7 +210,7 @@ function EmployerMain(){
             
         </tbody>
     </table>
-    `;
+    ` + AccessJobs();
 }
 
 function EmployerProfile(){
