@@ -45,6 +45,11 @@ function UpdateSection(){
 
 function UpdateSectionContent(sectionName){
     AccessJobs();
+    if (!x) {
+        AddJobs();
+        console.log('AddJobs function called');
+        let x;
+    }
     Section.innerHTML = GetSectionContent(sectionName);
 }
 
@@ -148,6 +153,7 @@ function AddJobs() {
             if (j === 50) { break; };
         }
         console.log('Successfully saved ' + j + ' jobs to IndexedDB')
+        DisplayData();
     })
 }
 
@@ -179,7 +185,7 @@ function MainContent(){
             
         </tbody>
     </table>
-    ` + AddJobs();;
+    `;
 }
 
 function EmployerMain(){
