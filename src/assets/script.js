@@ -152,7 +152,13 @@ function AddJobs() {
 }
 
 function DisplayData() {
-    console.log(db);
+    const request = db.transaction('jobs_array')
+                    .objectStore('jobs_array')
+                    .getAll();
+    request.onsuccess = ()=> {
+        const jobs = request.result;
+        console.table(jobs)
+    }
 }
 
 function MainContent(){
