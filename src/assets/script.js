@@ -64,7 +64,7 @@ function GetSectionContent(sectionName){
         return SectionNotFoundContent();
 }
 
-function AccessJobs() {
+window.onload = function AccessJobs() {
     fetch('../roles.json')
     .then(function(response){
         return response.json();
@@ -168,7 +168,7 @@ function MainContent(){
         <a href="#applicant-profile" class="nav-link green-btn">Applicant Profile</a>
     </div>
     <table cellspacing=0>
-        <thead>
+        <thead">
             <tr>
                 <th>Role Category</th>
                 <th>Role</th>
@@ -185,7 +185,7 @@ function MainContent(){
             
         </tbody>
     </table>
-    ` + AccessJobs() + AddJobs();
+    ` +  AddJobs();
 }
 
 function EmployerMain(){
@@ -212,11 +212,11 @@ function EmployerMain(){
                 <th>Details/Apply</th>
             </tr>
         </thead>
-        <tbody id="target">
+        <tbody id="target"">
             
         </tbody>
     </table>
-    ` + AccessJobs();
+    `;
 }
 
 function EmployerProfile(){
